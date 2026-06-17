@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>snx.sainsxiter.com</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+html { scroll-behavior:smooth; }
+
+body {
+  margin:0;
+  font-family:'Orbitron',sans-serif;
+  background:black;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* BACKGROUND */
+body::after {
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:url('sains.png') center/cover no-repeat;
+  opacity:0.25;
+  z-index:-4;
+}
+
+/* GRID */
+body::before {
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:
+    linear-gradient(rgba(255,0,0,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,0,0,0.1) 1px, transparent 1px);
+  background-size:40px 40px;
+  animation:moveGrid 12s linear infinite;
+  z-index:-3;
+}
+@keyframes moveGrid {
+  to { transform:translateY(40px); }
+}
+
+/* PARTICLE */
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-2;
+}
+
+/* ===== LOADING ===== */
+#loading {
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:9999;
+}
+
+.scanline {
+  position:absolute;
+  width:100%;
+  height:2px;
+  background:red;
+  animation:scan 1.8s linear infinite;
+  opacity:0.15;
+}
+@keyframes scan {
+  0% { top:0; }
+  100% { top:100%; }
+}
+
+/* SNX CLEAN RED */
+.sains-pro {
+  font-size:70px;
+  font-weight:700;
+  color:#ff0000;
+  letter-spacing:6px;
+
+  text-shadow:
+    0 0 10px #ff0000,
+    0 0 30px #ff0000,
+    0 0 60px rgba(255,0,0,0.7),
+    0 0 100px rgba(255,0,0,0.4);
+
+  animation:fadeIn 1.5s ease forwards, pulseGlow 3s ease-in-out infinite;
+}
+
+/* ANIMASI HALUS */
+@keyframes pulseGlow {
+  0%,100% { transform:scale(1); }
+  50% {
+    transform:scale(1.05);
+    text-shadow:
+      0 0 25px #ff0000,
+      0 0 70px #ff0000,
+      0 0 120px rgba(255,0,0,0.8);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(15px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.boot {
+  margin-top:12px;
+  font-size:12px;
+  color:#ff4d4d;
+}
+
+.progress {
+  width:220px;
+  height:5px;
+  background:#111;
+  margin-top:25px;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar {
+  height:100%;
+  background:linear-gradient(90deg, #ff0000, #ff4d4d);
+  box-shadow:0 0 20px red;
+  width:0%;
+}
+
+#percent {
+  margin-top:10px;
+  font-size:13px;
+  color:#ff4d4d;
+}
+
+/* HERO */
+.hero {
+  text-align:center;
+  padding:100px 20px;
+}
+
+/* SNX SAINSXITER */
+.hero h1 {
+  font-size:38px;
+  letter-spacing:3px;
+
+  background:linear-gradient(180deg,#ff0000,#660000);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+
+  text-shadow:
+    0 0 10px rgba(255,0,0,0.7),
+    0 0 25px rgba(255,0,0,0.4);
+
+  animation:heroGlow 3s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+  0%,100% { filter:brightness(1); }
+  50% { filter:brightness(1.3); }
+}
+
+.tagline {
+  margin-top:15px;
+  font-size:13px;
+  line-height:1.7;
+  color:#ff2b2b;
+  text-shadow:0 0 10px red;
+}
+
+/* BUTTON */
+button {
+  background:linear-gradient(45deg,#ff0000,#660000);
+  border:none;
+  padding:12px 20px;
+  color:white;
+  border-radius:8px;
+  margin-top:15px;
+  box-shadow:0 0 15px red;
+  transition:0.3s;
+}
+button:hover {
+  transform:scale(1.08);
+  box-shadow:0 0 35px red;
+}
+
+/* CARD */
+.products { padding:20px; }
+
+.card {
+  background:rgba(0,0,0,0.7);
+  margin-bottom:15px;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+  border:1px solid rgba(255,0,0,0.3);
+}
+
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 0 25px red;
+}
+
+.cart { padding:20px; }
+</style>
+</head>
+
+<body>
+
+<audio id="clickSound" src="musik.mp4"></audio>
+<canvas id="particle"></canvas>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="scanline"></div>
+  <div class="sains-pro">SNX</div>
+  <div class="boot">INITIALIZING SYSTEM...</div>
+
+  <div class="progress">
+    <div class="progress-bar" id="bar"></div>
+  </div>
+
+  <div id="percent">0%</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>SNX SAINSXITER</h1>
+
+  <div class="tagline">
+    BUY FILE/CHEAT AMAN<br>
+    ANTI BAND • ANTI BLACKLIST<br>
+    CUMA DI SAINSXITER<br>
+    TEMPAT FILE/CHEAT AMAN & MURAH
+  </div>
+
+  <button onclick="klik(); checkoutWA()">BELI SEKARANG</button>
+</div>
+
+<!-- PRODUK -->
+<div class="products">
+  <div class="card">
+    <h3>FILE DRAG HS 75%</h3>
+    <p>Rp 25.000</p>
+    <button onclick="klik(); tambah('FILE DRAG HS 75%',25000)">Tambah</button>
+  </div>
+
+  <div class="card">
+    <h3>FILE DRAG HS 85%</h3>
+    <p>Rp 35.000</p>
+    <button onclick="klik(); tambah('FILE DRAG HS 85%',35000)">Tambah</button>
+  </div>
+
+  <div class="card">
+    <h3>FILE DRAG HS 95%</h3>
+    <p>Rp 50.000</p>
+    <button onclick="klik(); tambah('FILE DRAG HS 95%',50000)">Tambah</button>
+  </div>
+
+  <div class="card">
+    <h3>BYPASS EMU VIP</h3>
+    <p>Rp 35.000</p>
+    <button onclick="klik(); tambah('BYPASS EMU PERMA 35K',35000)">Tambah</button>
+  </div>
+</div>
+
+<!-- CART -->
+<div class="cart">
+  <h2>Keranjang</h2>
+  <div id="cart"></div>
+  <p>Total: Rp <span id="total">0</span></p>
+  <button onclick="klik(); checkoutWA()">Checkout</button>
+</div>
+
+<script>
+let keranjang=[], total=0;
+
+function klik(){
+  let s=document.getElementById("clickSound");
+  if(s){s.currentTime=0;s.play().catch(()=>{});}
+}
+
+/* LOADING */
+let load=0, bar=document.getElementById("bar"), percent=document.getElementById("percent");
+let interval=setInterval(()=>{
+  load++;
+  bar.style.width=load+"%";
+  percent.innerText=load+"%";
+  if(load>=100){
+    clearInterval(interval);
+    document.getElementById("loading").style.display="none";
+  }
+},25);
+
+/* PARTICLE */
+let c=document.getElementById("particle"), ctx=c.getContext("2d");
+c.width=innerWidth; c.height=innerHeight;
+let p=[];
+for(let i=0;i<80;i++){
+  p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2,d:Math.random()*2});
+}
+function draw(){
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle="red";
+  p.forEach(a=>{
+    ctx.beginPath();
+    ctx.arc(a.x,a.y,a.r,0,Math.PI*2);
+    ctx.fill();
+    a.y+=a.d;
+    if(a.y>c.height){a.y=0;a.x=Math.random()*c.width;}
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* CART */
+function tambah(n,h){keranjang.push({nama:n,harga:h});total+=h;render();}
+function render(){
+  let el=document.getElementById("cart");
+  el.innerHTML="";
+  keranjang.forEach((i,x)=>{
+    el.innerHTML+=`<div style="display:flex;justify-content:space-between;">
+    ${i.nama}<button onclick="klik();hapus(${x})">X</button></div>`;
+  });
+  document.getElementById("total").innerText=total;
+}
+function hapus(i){total-=keranjang[i].harga;keranjang.splice(i,1);render();}
+function checkoutWA(){
+  if(keranjang.length===0){alert("barang belum di chekout");return;}
+  let n="628979616192", p="Pesanan SNX:%0A";
+  keranjang.forEach((i,x)=>{p+=`${x+1}. ${i.nama} - Rp ${i.harga}%0A`;});
+  p+=`Total: Rp ${total}`;
+  window.open(`https://wa.me/${n}?text=${p}`);
+}
+</script>
+
+</body>
+</html>
