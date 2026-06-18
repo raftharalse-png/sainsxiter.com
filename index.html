@@ -10,6 +10,160 @@
 <style>
 html { scroll-behavior:smooth; }
 
+.menu-btn{
+  position:fixed;
+  top:15px;
+  left:15px;
+  z-index:9999999;
+  font-size:26px;
+  color:red;
+  cursor:pointer;
+  text-shadow:0 0 10px red;
+}
+
+/* SIDEBAR */
+.side-menu{
+  position:fixed;
+  top:0;
+  left:-320px;
+  width:280px;
+  height:100%;
+  background:#0b0b0b;
+  border-right:1px solid red;
+  transition:0.3s;
+  z-index:9999998;
+  display:flex;
+  flex-direction:column;
+}
+
+/* OPEN STATE */
+.side-menu.active{
+  left:0;
+}
+
+.menu-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  z-index:9999997;
+}
+
+.menu-overlay.active{
+  display:block;
+}
+
+/* OVERLAY CLICK AREA (FIX CLOSE BUG) */
+.menu-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.4);
+  display:none;
+  z-index:9999997;
+}
+.menu-overlay.active{
+  display:block;
+}
+
+/* HEADER */
+.menu-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px;
+  color:white;
+  border-bottom:1px solid rgba(255,0,0,0.3);
+}
+
+.menu-header h3{
+  margin:0;
+}
+
+.menu-header span{
+  cursor:pointer;
+  color:red;
+  font-size:18px;
+}
+
+/* SEARCH */
+.search{
+  margin:10px;
+  padding:8px;
+  border:none;
+  outline:none;
+  border-radius:6px;
+  background:#111;
+  color:white;
+  border:1px solid red;
+}
+
+/* LIST */
+.menu-list{
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+.item{
+  padding:10px;
+  color:#ccc;
+  cursor:pointer;
+  border-radius:6px;
+  font-size:13px;
+}
+
+.item:hover{
+  background:red;
+  color:white;
+}
+
+.item.active{
+  color:#4da3ff;
+}
+
+/* FOOTER */
+.menu-footer{
+  padding:10px;
+  border-top:1px solid rgba(255,0,0,0.3);
+  color:white;
+}
+
+/* DASHBOARD PANEL */
+.menu-panel {
+  position: fixed;
+  top: 50px;
+  left: 15px;
+  width: 180px;
+  background: #0b0b0b;
+  border: 1px solid red;
+  border-radius: 10px;
+  box-shadow: 0 0 20px red;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000003;
+}
+
+.menu-panel button {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,0,0,0.2);
+}
+
+.menu-panel button:hover {
+  background: red;
+}
+
 body {
   margin:0;
   font-family:'Orbitron',sans-serif;
@@ -19,31 +173,31 @@ body {
 }
 
 /* BACKGROUND */
-body::after {
-  content:"";
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:url('sains.png') center/cover no-repeat;
-  opacity:0.25;
-  z-index:-4;
-}
-
-/* GRID */
 body::before {
   content:"";
   position:fixed;
   width:100%;
   height:100%;
-  background:
-    linear-gradient(rgba(255,0,0,0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,0,0,0.1) 1px, transparent 1px);
-  background-size:40px 40px;
-  animation:moveGrid 12s linear infinite;
-  z-index:-3;
+  background:url('background.jpg') center/cover no-repeat;
+  background-size:cover;
+  opacity:0.35;
+  z-index:-4;
 }
-@keyframes moveGrid {
-  to { transform:translateY(40px); }
+
+/* DARK CINEMATIC OVERLAY */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      circle at center,
+      rgba(255,0,0,0.08),
+      rgba(0,0,0,0.92)
+  );
+  z-index: -3;
 }
 
 /* PARTICLE */
@@ -56,6 +210,7 @@ canvas {
 
 /* ===== LOADING ===== */
 #loading {
+  pointer-events; none;
   position:fixed;
   width:100%;
   height:100%;
@@ -210,10 +365,241 @@ button:hover {
 }
 
 .cart { padding:20px; }
+
+.wa-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+}
+
+.wa-box {
+  background: #0a0a0a;
+  border: 1px solid rgba(255,0,0,0.4);
+  padding: 25px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 0 25px red;
+  animation: popIn 0.4s ease;
+  width: 260px;
+}
+
+.wa-box h2 {
+  color: red;
+  margin-bottom: 10px;
+  font-size: 18px;
+  text-shadow: 0 0 10px red;
+}
+
+.wa-box p {
+  font-size: 12px;
+  color: #ff4d4d;
+  margin-bottom: 15px;
+}
+
+.wa-box a {
+  display: block;
+  background: linear-gradient(45deg, #25D366, #128C7E);
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-bottom: 10px;
+  box-shadow: 0 0 15px rgba(37,211,102,0.6);
+}
+
+.wa-box button {
+  background: transparent;
+  border: 1px solid red;
+  color: red;
+  padding: 8px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.chat-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 99999;
+  background: linear-gradient(45deg, #ff0000, #660000);
+  color: white;
+  padding: 12px 14px;
+  border-radius: 50px;
+  box-shadow: 0 0 20px red;
+  cursor: pointer;
+  font-size: 12px;
+  animation: pulseChat 2s infinite;
+}
+
+@keyframes pulseChat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* CHAT BOX */
+.chat-box {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 280px;
+  height: 380px;
+  background: #0b0b0b;
+  border: 1px solid red;
+  border-radius: 12px;
+  box-shadow: 0 0 25px red;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999999;
+}
+
+/* HEADER */
+.chat-header {
+  background: red;
+  color: white;
+  padding: 10px;
+  font-size: 12px;
+}
+
+/* AREA CHAT */
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* BUBBLE USER */
+.msg-user {
+  align-self: flex-end;
+  background: #ff0000;
+  color: white;
+  padding: 7px 10px;
+  border-radius: 12px 12px 0 12px;
+  font-size: 12px;
+  max-width: 80%;
+}
+
+/* BUBBLE ADMIN */
+.msg-admin {
+  align-self: flex-start;
+  background: #222;
+  color: #ff4d4d;
+  padding: 7px 10px;
+  border-radius: 12px 12px 12px 0;
+  font-size: 12px;
+  max-width: 80%;
+  border: 1px solid red;
+}
+
+/* INPUT */
+.chat-input {
+  display: flex;
+  border-top: 1px solid red;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  outline: none;
+  background: black;
+  color: white;
+}
+
+.chat-input button {
+  background: red;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+}
+
+.chat-header {
+  background: red;
+  padding: 10px;
+  font-size: 12px;
+  color: white;
+}
+
+.chat-body {
+  padding: 10px;
+  font-size: 12px;
+}
+
+.chat-body input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: none;
+  outline: none;
+}
+
+.chat-body button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 8px;
+  background: red;
+  color: white;
+  border: none;
+}
+
 </style>
 </head>
 
 <body>
+  
+<div id="menuBtn" class="menu-btn" onclick="openMenu()">☰</div>
+  
+<div id="sideMenu" class="side-menu">
+
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+
+  <div class="menu-header">
+    <h3>Menu</h3>
+    <span onclick="closeMenu()">✖</span>
+  </div>
+
+  <input class="search" placeholder="Cari aplikasi...">
+
+  <div class="menu-list">
+
+    <div class="item">Join VIP Member</div>
+    <div class="item">Website Mod Mimin</div>
+    <div class="item">Web Digital Product</div>
+    <div class="item">Web Store Top Up</div>
+    <div class="item">Get Source Code</div>
+    <div class="item">Make a Donation</div>
+    <div class="item active">Event Mission</div>
+    <div class="item">Leaderboard</div>
+    <div class="item">Apps Store</div>
+    <div class="item">Game Center</div>
+    <div class="item">Share Web</div>
+    <div class="item">Cara Melewati Link</div>
+    <div class="item">Playlist Spotify</div>
+    <div class="item">Messages</div>
+
+  </div>
+
+  <div class="menu-footer">
+    <div class="user">👤 Guest</div>
+  </div>
+
+</div>
 
 <audio id="clickSound" src="musik.mp4"></audio>
 <canvas id="particle"></canvas>
@@ -363,6 +749,22 @@ button:hover {
 <script>
 let keranjang=[], total=0;
 
+function openMenu(){
+  document.getElementById("sideMenu").classList.add("active");
+}
+
+function openMenu(){
+  document.getElementById("sideMenu").classList.add("active");
+  document.getElementById("menuOverlay").classList.add("active");
+  document.getElementById("menuBtn").style.display = "none";
+}
+
+function closeMenu(){
+  document.getElementById("sideMenu").classList.remove("active");
+  document.getElementById("menuOverlay").classList.remove("active");
+  document.getElementById("menuBtn").style.display = "block";
+}
+
 function klik(){
   let s=document.getElementById("clickSound");
   if(s){s.currentTime=0;s.play().catch(()=>{});}
@@ -375,9 +777,10 @@ let interval=setInterval(()=>{
   bar.style.width=load+"%";
   percent.innerText=load+"%";
   if(load>=100){
-    clearInterval(interval);
-    document.getElementById("loading").style.display="none";
-  }
+  clearInterval(interval);
+  document.getElementById("loading").style.display="none";
+  setTimeout(tampilPopup, 500);
+}
 },25);
 
 /* PARTICLE */
@@ -420,7 +823,150 @@ function checkoutWA(){
   p+=`Total: Rp ${total}`;
   window.open(`https://wa.me/${n}?text=${p}`);
 }
+
+function tampilPopup() {
+  document.getElementById("waPopup").style.display = "flex";
+}
+
+function tutupPopup() {
+  document.getElementById("waPopup").style.display = "none";
+}
+
+function openChat(){
+  document.getElementById("chatBox").style.display = "block";
+}
+
+function closeChat(){
+  let box = document.getElementById("chatBox");
+  box.style.opacity = "0";
+  box.style.transform = "scale(0.9)";
+
+  setTimeout(()=>{
+    box.style.display = "none";
+    box.style.opacity = "1";
+    box.style.transform = "scale(1)";
+  },200);
+}
+
+function sendChat(){
+  let input = document.getElementById("chatMsg");
+  let msg = input.value;
+  if(!msg) return;
+
+  addUserMessage(msg);
+  input.value = "";
+
+  // typing effect delay (biar realistis)
+  setTimeout(()=>{
+    addAdminMessage("typing...");
+  },500);
+
+  setTimeout(()=>{
+    let box = document.getElementById("chatMessages");
+
+    // hapus typing
+    box.innerHTML = box.innerHTML.replace(`<div class="msg-admin">typing...</div>`, "");
+
+    addAdminMessage(getAIResponse(msg));
+  },1500);
+}
+
+function openChat(){
+  document.getElementById("chatBox").style.display = "flex";
+
+  if(document.getElementById("chatMessages").innerHTML === ""){
+    addAdminMessage("Halo 👋, ada yang bisa dibantu?");
+  }
+}
+
+function closeChat(){
+  document.getElementById("chatBox").style.display = "none";
+}
+
+function addUserMessage(text){
+  let box = document.getElementById("chatMessages");
+  box.innerHTML += `<div class="msg-user">${text}</div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+function addAdminMessage(text){
+  let box = document.getElementById("chatMessages");
+  box.innerHTML += `<div class="msg-admin">${text}</div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+function getAIResponse(msg){
+  msg = msg.toLowerCase();
+
+  if(msg.includes("harga")){
+    return "Harga mulai dari Rp 25.000 sampai Rp 150.000 tergantung produk 👍";
+  }
+
+  if(msg.includes("beli") || msg.includes("order")){
+    return "Silakan pilih produk lalu klik tombol Tambah untuk checkout 👇";
+  }
+
+  if(msg.includes("admin")){
+    return "Admin siap bantu kamu, silakan kirim pertanyaan kamu 😊";
+  }
+
+  if(msg.includes("halo") || msg.includes("hai")){
+    return "Halo 👋 ada yang bisa kami bantu?";
+  }
+
+  if(msg.includes("bayar")){
+    return "Pembayaran via WhatsApp setelah checkout ya 👍";
+  }
+
+  if(msg.includes("aman") || msg.includes("safe")){
+    return "Ya, semua produk aman digunakan sesuai deskripsi 👍";
+  }
+
+  return "Mohon tunggu sebentar, admin sedang mengecek permintaan kamu...";
+}
+
 </script>
 
+<!-- WHATSAPP CHANNEL POPUP -->
+<div id="waPopup" class="wa-popup">
+  <div class="wa-box">
+    <h2>JOIN SALURAN WA</h2>
+    <p>Gabung untuk update file & cheat terbaru</p>
+
+    <a href="https://whatsapp.com/channel/0029Vb8NPpcDzgTJIhNA680g" target="_blank" onclick="tutupPopup()">
+      JOIN SEKARANG
+    </a>
+
+    <button onclick="tutupPopup()">NANTI</button>
+  </div>
+</div>
+
+<!-- LIVE CHAT BUTTON -->
+<div class="chat-float" onclick="openChat()">
+  💬 LIVE CHAT
+</div>
+
+<div class="chat-box" id="chatBox">
+
+  <div class="chat-header">
+  LIVE CHAT ADMIN • ONLINE 🟢
+  <span onclick="closeChat()" style="
+    float:right;
+    cursor:pointer;
+    font-weight:bold;
+    color:white;
+  ">✖</span>
+</div>
+
+  <div class="chat-messages" id="chatMessages"></div>
+
+  <div class="chat-input">
+    <input id="chatMsg" placeholder="Ketik pesan...">
+    <button onclick="sendChat()">➤</button>
+  </div>
+
+</div>
+
 </body>
-  </html>
+      </html>
+      
